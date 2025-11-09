@@ -5,7 +5,7 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #d7e7ff, #f5fffd);
             min-height: 100vh;
-            padding: 40px 0;
+            padding: 40px 5px;
         }
 
         .card-modern {
@@ -123,4 +123,5 @@
             background: #4c63ff;
             border-radius: 10px;
         }
+
  

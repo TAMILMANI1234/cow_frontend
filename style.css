@@ -1,0 +1,126 @@
+ 
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #d7e7ff, #f5fffd);
+            min-height: 100vh;
+            padding: 40px 0;
+        }
+
+        .card-modern {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            box-shadow: 0px 10px 35px rgba(0, 0, 0, 0.10);
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #172b4d;
+        }
+
+        .choose-lang-box {
+            max-width: 750px;
+            margin: auto;
+            padding: 15px 25px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        select {
+            border-radius: 8px;
+            padding: 7px 12px;
+            border: 2px solid #4c6fff;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        select:hover,
+        select:focus {
+            border-color: #0021ff;
+            box-shadow: 0px 0px 6px rgba(65, 90, 255, 0.55);
+        }
+
+        img {
+            width: 100%;
+            border-radius: 12px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4461ff, #2d4aff);
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2740ff, #001aff);
+        }
+
+        /* Loader Overlay */
+        #overlay {
+            position: fixed;
+            inset: 0;
+            display: none;
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.35);
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 8px solid #ffffff;
+            border-top: 8px solid #4461ff;
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ✅ Updated Scrollable AI Recommendation Box */
+        .ai-box {
+            background: #eef1ff;
+            border-left: 6px solid #3f54ff;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-top: 8px;
+            max-height: 300px;   
+            overflow-y: auto;    
+            white-space: pre-line;
+        }
+ 
+        .ai-box::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .ai-box::-webkit-scrollbar-track {
+            background: #dfe3ff;
+            border-radius: 10px;
+        }
+
+        .ai-box::-webkit-scrollbar-thumb {
+            background: #4c63ff;
+            border-radius: 10px;
+        }
+ 

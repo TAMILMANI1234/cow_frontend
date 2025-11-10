@@ -78,7 +78,7 @@
       formData.append("person_height", heightInput.value);
       formData.append("lang", lang.value);
 
-      fetch("http://localhost:8080/upload", {
+      fetch("https://creedal-dayton-monarchistic.ngrok-free.dev/upload", {
         method: "POST",
         body: formData
       })
@@ -106,6 +106,8 @@
             <h5 class="mt-4 text-primary fw-semibold">🧪 Diagnosis Summary</h5>
             ${items}
           `;
+        }).catch((e)=>{
+            alert("Call Tamil to Retify")
         })
         .finally(() => {
           document.getElementById("overlay").style.display = "none";

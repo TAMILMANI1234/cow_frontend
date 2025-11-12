@@ -34,8 +34,18 @@
     <!-- Upload Section -->
     <div class="card-modern mb-4">
       <h4 class="section-title text-center mb-3">📤 Upload Cow Image</h4>
-      <input type="file" id="fileInput" accept="image/*" class="form-control mb-3 shadow-sm">
-      <img id="preview" src="#" alt="Preview" class="img-fluid shadow-sm">
+      <div class="row">
+        <div class="col-lg-6">
+          <input type="file" id="fileInput1" accept="image/*" class="form-control mb-3 shadow-sm">
+          <img id="preview1" src="#" alt="Preview" class="img-fluid shadow-sm">
+          <h5 class="text-center p-2">Cow Full Image with Person</h5>
+        </div>
+        <div class="col-lg-6">
+          <input type="file" id="fileInput2" accept="image/*" class="form-control mb-3 shadow-sm">
+          <img id="preview2" src="#" alt="Preview" class="img-fluid shadow-sm">
+            <h5 class="text-center p-2">Cow Head</h5>
+        </div>
+      </div>
 
       <input type="text" id="height" class="form-control mt-3 shadow-sm"
         placeholder="Enter Person Height (in cm)">
@@ -45,24 +55,40 @@
     <!-- Results Section -->
     <div class="card-modern shadow-sm">
       <h4 class="section-title text-center">📊 Analysis Result</h4>
-      <div id="result" class="mt-3"></div>
+      <div id="result" class="mt-3">
+          <img id="serverimage1" src="" alt="Uploaded Cow" class="img-fluid mt-3" style="display:none; max-width:400px; border-radius:10px;"/>
+
+      </div>
     </div>
 
   </div>
 
   <script>
-    const fileInput = document.getElementById('fileInput');
+    const fileInput1 = document.getElementById('fileInput1');
+    const fileInput2 = document.getElementById('fileInput2');
     const heightInput = document.getElementById('height');
-    const preview = document.getElementById('preview');
+    const preview1 = document.getElementById('preview1');
+    const preview2 = document.getElementById('preview2');
     const resultDiv = document.getElementById('result');
     const lang = document.getElementById('lang');
 
-    fileInput.addEventListener('change', () => {
-      const file = fileInput.files[0];
+    const serverimage1 = document.getElementById("serverimage1");
+
+    fileInput1.addEventListener('change', () => {
+      const file = fileInput1.files[0];
       const reader = new FileReader();
       reader.onload = () => {
-        preview.style.display = "block";
-        preview.src = reader.result;
+        preview1.style.display = "block";
+        preview1.src = reader.result;
+      };
+      if (file) reader.readAsDataURL(file);
+    });
+    fileInput2.addEventListener('change', () => {
+      const file = fileInput2.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        preview2.style.display = "block";
+        preview2.src = reader.result;
       };
       if (file) reader.readAsDataURL(file);
     });
@@ -70,32 +96,46 @@
     function uploadImage() {
       document.getElementById("overlay").style.display = "flex";
 
-      const file = fileInput.files[0];
-      if (!file) return alert("Please select an image.");
+      const file = fileInput1.files[0];
+      const cowface = fileInput2.files[0];
+      if (!file || !cowface) return alert("Please select an image.");
 
       let formData = new FormData();
       formData.append("image", file);
+      formData.append("cowface", cowface);
       formData.append("person_height", heightInput.value);
       formData.append("lang", lang.value);
-
+// https://creedal-dayton-monarchistic.ngrok-free.dev/upload
+//http://127.0.0.1:8080/upload
       fetch("https://creedal-dayton-monarchistic.ngrok-free.dev/upload", {
         method: "POST",
         body: formData
       })
         .then(res => res.json())
         .then(data => {
+          // console.log(data)
           let items = "";
           data.diagnosis_report.report.forEach((item) => {
             items += `
               <div class='pt-3'>
                 <strong>Label:</strong> ${item.label || "Unavailable"} <br>
                 <strong>Confidence:</strong> ${item.confidence || "Unavailable"} 
+                <div class="text-start">
+                  <img src="data:image/jpeg;base64,${item.annotated_image_base64}" class="img-fluid shadow-sm mb-3" style="display:block; border-radius:10px; max-width:400px;" alt="No Anotation" />
+                </div>
                 <div class="ai-box">${item.ai_recommendations || "No recommendations available"}</div>
               </div>`;
-          });
-
+          }); 
           resultDiv.innerHTML = `
-            <div class="result-box">
+            <div class="result-box"> 
+              <div class='row'>
+                <div class="col-lg-6">
+                   <img src="data:image/jpeg;base64,${data.cow_image_base64}" class="img-fluid shadow-sm mb-3" style="display:block; border-radius:10px; max-width:400px; margin:auto;" alt="Cow Image" />
+                </div>
+                <div class="col-lg-6">
+                   <img src="data:image/jpeg;base64,${data.cow_face_base64}" class="img-fluid shadow-sm mb-3" style="display:block; border-radius:10px; max-width:400px; margin:auto;" alt="Cow Image" />
+                </div>
+              </div>
               <p><strong>⚠️ Warning:</strong> ${data.warning || "No Warning"}</p>
               <p><strong>🐄 Cow Found:</strong> ${data.cow_found ? "✅ Yes" : "❌ No"}</p>
               <p><strong>🐮 Breed:</strong> ${data.cow_breed}</p>
@@ -107,9 +147,14 @@
             ${items}
           `;
         }).catch((e)=>{
+          console.log(e)
             alert("Call Tamil to Retify")
         })
         .finally(() => {
+           preview2.src = ""
+           preview1.src = ""
+           fileInput1.src = ""
+           fileInput2.src = ""
           document.getElementById("overlay").style.display = "none";
         });
     }

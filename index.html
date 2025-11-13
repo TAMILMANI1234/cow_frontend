@@ -43,12 +43,11 @@
         <div class="col-lg-6">
           <input type="file" id="fileInput2" accept="image/*" class="form-control mb-3 shadow-sm">
           <img id="preview2" src="#" alt="Preview" class="img-fluid shadow-sm">
-            <h5 class="text-center p-2">Cow Head</h5>
+          <h5 class="text-center p-2">Cow Head</h5>
         </div>
       </div>
 
-      <input type="text" id="height" class="form-control mt-3 shadow-sm"
-        placeholder="Enter Person Height (in cm)">
+      <input type="text" id="height" class="form-control mt-3 shadow-sm" placeholder="Enter Person Height (in cm)">
       <button class="btn btn-primary w-100 mt-3" onclick="uploadImage()">🔍 Analyze</button>
     </div>
 
@@ -56,7 +55,8 @@
     <div class="card-modern shadow-sm">
       <h4 class="section-title text-center">📊 Analysis Result</h4>
       <div id="result" class="mt-3">
-          <img id="serverimage1" src="" alt="Uploaded Cow" class="img-fluid mt-3" style="display:none; max-width:400px; border-radius:10px;"/>
+        <img id="serverimage1" src="" alt="Uploaded Cow" class="img-fluid mt-3"
+          style="display:none; max-width:400px; border-radius:10px;" />
 
       </div>
     </div>
@@ -93,9 +93,7 @@
       if (file) reader.readAsDataURL(file);
     });
 
-    function uploadImage() {
-      document.getElementById("overlay").style.display = "flex";
-
+    function uploadImage() { 
       const file = fileInput1.files[0];
       const cowface = fileInput2.files[0];
       if (!file || !cowface) return alert("Please select an image.");
@@ -105,15 +103,16 @@
       formData.append("cowface", cowface);
       formData.append("person_height", heightInput.value);
       formData.append("lang", lang.value);
-// https://creedal-dayton-monarchistic.ngrok-free.dev/upload
-//http://127.0.0.1:8080/upload
+      // https://creedal-dayton-monarchistic.ngrok-free.dev/upload
+      //http://127.0.0.1:8080/upload
+      document.getElementById("overlay").style.display = "flex";
       fetch("https://creedal-dayton-monarchistic.ngrok-free.dev/upload", {
         method: "POST",
         body: formData
       })
         .then(res => res.json())
         .then(data => {
-          // console.log(data)
+          console.log(data)
           let items = "";
           data.diagnosis_report.report.forEach((item) => {
             items += `
@@ -125,7 +124,7 @@
                 </div>
                 <div class="ai-box">${item.ai_recommendations || "No recommendations available"}</div>
               </div>`;
-          }); 
+          });
           resultDiv.innerHTML = `
             <div class="result-box"> 
               <div class='row'>
@@ -137,7 +136,8 @@
                 </div>
               </div>
               <p><strong>⚠️ Warning:</strong> ${data.warning || "No Warning"}</p>
-              <p><strong>🐄 Cow Found:</strong> ${data.cow_found ? "✅ Yes" : "❌ No"}</p>
+              <p><strong>🐄 Cattle Found:</strong> ${data.cow_found ? "✅ Yes" : "❌ No"}</p>
+              <p><strong>🐄 Cattle Gender:</strong> ${data.gender}</p>
               <p><strong>🐮 Breed:</strong> ${data.cow_breed}</p>
               <p><strong>⚖️ Estimated Weight:</strong> ${data.estimated_approximate_weight || "Not Available"}</p>
               <p><strong>🩺 Udder Found:</strong> ${data.udder_found ? "✅ Yes" : "❌ No"}</p>
@@ -146,15 +146,16 @@
             <h5 class="mt-4 text-primary fw-semibold">🧪 Diagnosis Summary</h5>
             ${items}
           `;
-        }).catch((e)=>{
+        }).catch((e) => {
           console.log(e)
-            alert("Call Tamil to Retify")
+          alert("Call Tamil to Retify")
         })
         .finally(() => {
-           preview2.src = ""
-           preview1.src = ""
-           fileInput1.src = ""
-           fileInput2.src = ""
+          document.getElementById("preview1").src = "";
+          document.getElementById("preview2").src = "";
+          document.getElementById("fileInput1").value = "";
+          document.getElementById("fileInput2").value = "";
+
           document.getElementById("overlay").style.display = "none";
         });
     }
